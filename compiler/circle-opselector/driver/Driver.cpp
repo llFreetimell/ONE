@@ -16,7 +16,8 @@
 
 #include "SinglePass.h"
 
-// TODO Add new pass headers
+#include "ResetInputByName.h"
+#include "ResetOutputByName.h"
 
 #include <foder/FileLoader.h>
 
@@ -39,7 +40,7 @@ void print_version(void)
 
 int entry(int argc, char **argv)
 {
-  // TODO Add new option names!
+  const std::string reset_output_by_name = "--reset_output_by_name";
 
   arser::Arser arser("circle-opselector provides selecting operations in circle model");
 
@@ -50,7 +51,11 @@ int entry(int argc, char **argv)
     .help("Show version information and exit")
     .exit_with(print_version);
 
-  // TODO Add new options!
+  arser.add_argument(reset_output_by_name)
+    .nargs(1)
+    .type(arser::DataType::STR)
+    .required(false)
+    .help("Reset output by given names (comma-separated)");
 
   arser.add_argument("--input").nargs(1).type(arser::DataType::STR).help("Input circle model");
   arser.add_argument("--output").nargs(1).type(arser::DataType::STR).help("Output circle model");
@@ -95,7 +100,11 @@ int entry(int argc, char **argv)
   // Enable each pass
   std::vector<std::unique_ptr<opselector::SinglePass>> passes;
 
-  // TODO Add new passes!
+  if (arser[reset_output_by_name])
+  {
+    const auto args = arser.get<std::string>(reset_output_by_name);
+    passes.emplace_back(std::make_unique<opselector::ResetOutputByNamePass>(args));
+  }
 
   // Run for each passes
   for (auto &pass : passes)
