@@ -44,6 +44,20 @@ private:
   int64_t _index{-1}; // Uninitialized
 };
 
+/**
+ * @brief CircleInputExclude is used to specifying not exported nodes
+ */
+class CircleInputExclude final
+  : public FixedArityNode<1, CircleNodeImpl<CircleOpcode::CIRCLEINPUTEXCLUDE>>
+{
+public:
+  CircleInputExclude() = default;
+
+public:
+  loco::Node *from(void) const { return at(0)->node(); }
+  void from(loco::Node *node) { at(0)->node(node); }
+};
+
 } // namespace luci
 
 #endif // __LUCI_IR_CIRCLEINPUT_H__

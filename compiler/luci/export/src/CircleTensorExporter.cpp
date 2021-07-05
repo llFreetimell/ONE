@@ -106,6 +106,7 @@ private:
 struct NoOpDetector final : public luci::CircleNodeMutableVisitor<bool>
 {
   // Input is Virtual but does produce a Tensor
+  bool visit(luci::CircleInputExclude *) final { return true; }
   // Output is Virtual that does not produce any Tensor
   bool visit(luci::CircleOutput *) final { return true; }
   bool visit(luci::CircleOutputExclude *) final { return true; }

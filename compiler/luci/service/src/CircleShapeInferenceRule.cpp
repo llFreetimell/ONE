@@ -2455,6 +2455,8 @@ public:
   // Virtual
   loco::NodeShape visit(const luci::CircleInput *node) final { return infer_input(node); }
 
+  loco::NodeShape visit(const luci::CircleInputExclude *node) final { return use_own(node); }
+
   loco::NodeShape visit(const luci::CircleOutput *node) final { return infer_output(node); }
 
   loco::NodeShape visit(const luci::CircleOutputDummy *node) final { return use_own(node); }

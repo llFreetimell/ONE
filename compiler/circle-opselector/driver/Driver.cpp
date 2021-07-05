@@ -40,6 +40,7 @@ void print_version(void)
 
 int entry(int argc, char **argv)
 {
+  const std::string reset_input_by_name = "--reset_input_by_name";
   const std::string reset_output_by_name = "--reset_output_by_name";
 
   arser::Arser arser("circle-opselector provides selecting operations in circle model");
@@ -50,6 +51,12 @@ int entry(int argc, char **argv)
     .default_value(false)
     .help("Show version information and exit")
     .exit_with(print_version);
+
+  arser.add_argument(reset_input_by_name)
+    .nargs(1)
+    .type(arser::DataType::STR)
+    .required(false)
+    .help("Reset input by given names (comma-separated)");
 
   arser.add_argument(reset_output_by_name)
     .nargs(1)
@@ -100,6 +107,11 @@ int entry(int argc, char **argv)
   // Enable each pass
   std::vector<std::unique_ptr<opselector::SinglePass>> passes;
 
+  if (arser[reset_input_by_name])
+  {
+    const auto args = arser.get<std::string>(reset_input_by_name);
+    passes.emplace_back(std::make_unique<opselector::ResetInputByNamePass>(args));
+  }
   if (arser[reset_output_by_name])
   {
     const auto args = arser.get<std::string>(reset_output_by_name);

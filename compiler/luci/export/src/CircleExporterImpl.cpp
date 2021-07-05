@@ -41,7 +41,16 @@ void registerGraphInputTensors(loco::Graph *graph, luci::SubGraphContext &ctx)
   {
     auto node = luci::input_node(graph, n);
     assert(node != nullptr);
-    ctx._inputs.push_back(luci::get_tensor_index(node));
+
+    bool should_skip = false;
+    for (auto node : loco::succs(node))
+    {
+      if (dynamic_cast<luci::CircleInputExclude *>(node) != nullptr)
+        should_skip = true;
+    }
+
+    if (!should_skip)
+      ctx._inputs.push_back(luci::get_tensor_index(node));
   }
 }
 
