@@ -1,3 +1,7 @@
+if(NOT ENABLE_TEST)
+  return()
+endif(NOT ENABLE_TEST)
+
 set(CIRCLECHEF_FILE_PATH $<TARGET_FILE:circlechef-file>)
 set(TFLCHEF_FILE_PATH $<TARGET_FILE:tflchef-file>)
 set(TFLITE2CIRCLE_PATH $<TARGET_FILE:tflite2circle>)
